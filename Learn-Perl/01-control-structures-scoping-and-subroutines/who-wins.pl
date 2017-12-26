@@ -20,7 +20,8 @@ my $max_name;
 while (my $line = <$fh>) {
     chomp($line);
     last if ($line =~ m/^Team \d+$/);
-    my ($name, $bugs) = split(/: +/, $line, 2);
+    $line =~ m/^(\w+): (\d+)$/;
+    my ($name, $bugs) = ($1, $2);
     die "malformed '$line'" unless(defined $bugs);
     if ($bugs > $max_bugs) {
         $max_bugs = $bugs;
