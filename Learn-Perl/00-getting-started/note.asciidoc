@@ -1,0 +1,10 @@
+== Hello Perl
+
+.string interpolation
+[source, perl]
+perl -E 'say "\a"'
+perl -E "say '\a'"
+
+NOTE: double-quoted strings do nifty things like translating backslashed
+characters into some special kind of output
+
