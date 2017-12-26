@@ -15,10 +15,11 @@ while (<$fh>) {
 }
 die "cannnot find 'Team $team_number'" if (eof $fh);
 
-my $max_bugs = 0;
+my $max_bugs = -1;
 my $max_name;
 while (my $line = <$fh>) {
     chomp($line);
+    next if $line eq "";
     last if ($line =~ m/^Team \d+$/);
     $line =~ m/^(\w+): (\d+)$/;
     my ($name, $bugs) = ($1, $2);
@@ -29,5 +30,9 @@ while (my $line = <$fh>) {
     }
 }
 
-say "cong $max_name! Winner Winner Chicken Dinner!"
+if ($max_bugs > 0) {
+    say "cong $max_name! Winner Winner Chicken Dinner!";
+} else {
+    say "Nobody fixed any bugs!";
+}
 
