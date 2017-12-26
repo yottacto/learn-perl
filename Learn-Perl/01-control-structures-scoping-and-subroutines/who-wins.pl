@@ -37,7 +37,7 @@ while (my $line = <$fh>) {
 }
 
 say "Bugs created:";
-say " $_: $created{$_}" for sort {$created{$b} <=> $created{$a}} keys %created;
+say " $_: $created{$_}" for sort {-($created{$a} <=> $created{$b})} keys %created;
 
 say "Bugs fixed:";
 say " $_: $bugs{$_}" for sort keys %bugs;
