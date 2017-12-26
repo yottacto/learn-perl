@@ -10,3 +10,6 @@
 There's more than one way to do it.
 ----
 
+- `%` hash and `@` array
+- `ref` function
+
