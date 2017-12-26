@@ -1,2 +1,8 @@
 == Learn Perl
 
+please reference to https://learn.perl.org/tutorials/[Perl::LEARN].
+
+== Perl Tutorials
+
+- http://learnperl.scratchcomputing.com/[Learn Perl]
+
