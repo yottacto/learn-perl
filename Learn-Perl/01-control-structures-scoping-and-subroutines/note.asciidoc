@@ -1,0 +1,12 @@
+== Solving a Problem
+
+- `$` sigil
+- `$!` variable
+- `<>` operator
+- `$_` topic variable (pronounced "it")
+
+[quote, Perl motto]
+----
+There's more than one way to do it.
+----
+
