@@ -16,23 +16,31 @@ while (<$fh>) {
 die "cannnot find 'Team $team_number'" if (eof $fh);
 
 my %bugs;
+my %created;
 my $max_bugs = 0;
 my @max_name;
 while (my $line = <$fh>) {
     chomp($line);
     next if ($line eq "");
     last if ($line =~ m/^Team \d+$/);
-    my ($name, $bugs) = split(/: +/, $line, 2);
-    die "malformed '$line'" unless(defined $bugs);
-    $bugs{$name} = $bugs;
-    if ($bugs > $max_bugs) {
-        $max_bugs = $bugs;
+    my ($name, $fixed, $created) = split(/[:,] +/, $line, 3);
+    die "malformed '$line'" unless(defined $created);
+    $bugs{$name}    = $fixed;
+    $created{$name} = $created;
+    my $net = $fixed - $created;
+    if ($net > $max_bugs) {
+        $max_bugs = $net;
         @max_name = $name;
-    } elsif ($bugs == $max_bugs) {
+    } elsif ($net == $max_bugs) {
         push(@max_name, $name)
     }
 }
 
-say "$_: $bugs{$_}" for (sort keys %bugs);
+say "Bugs created:";
+say " $_: $created{$_}" for sort {$created{$b} <=> $created{$a}} keys %created;
+
+say "Bugs fixed:";
+say " $_: $bugs{$_}" for sort keys %bugs;
+
 say "@max_name wins!";
 
