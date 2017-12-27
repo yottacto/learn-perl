@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 use 5.26.1;
 use warnings;
 use strict;
@@ -7,55 +5,50 @@ use strict;
 my $team_number = 42;
 my $filename = 'input';
 
-open my $fh, '<', $filename or die "cannot open '$filename' $!";
+open my $fh, '<', $filename or die "cannot open '$filename'";
 
 my %bugs = get_team_stats($fh, $team_number);
 
-say "Bugs created:";
-say " $_: $bugs{$_}[1]" for sort {$bugs{$b}[1] <=> $bugs{$a}[1]} keys %bugs;
+say "Bug created:";
+say "\t$_: $bugs{$_}[1]" for sort {$bugs{$b}[1] <=> $bugs{$a}[1]} keys %bugs;
 
-say "Bugs fixed";
-say " $_: $bugs{$_}[0]" for sort keys %bugs;
+say "Bug fixed";
+say "\t$_: $bugs{$_}[0]" for sort {$bugs{$b}[0] <=> $bugs{$a}[0]} keys %bugs;
 
 my @winners = get_winners(map {$_ => $bugs{$_}[0] - $bugs{$_}[1]} keys %bugs);
-
-say "$_ wins!" for @winners;
-
-exit;
+say "cong, $_ win!" for @winners;
 
 sub get_team_stats
 {
-    my ($fh, $number) = @_;
-
-    my @data;
+    my ($fh, $team_number) = @_;
     my $found;
-    while (my $line = <$fh>) {
-        chomp $line;
-        next if $line eq "";
-        if ($line =~ m/^Team (\d+)$/) {
+    my @stats;
+    while (<$fh>) {
+        chomp;
+        next if $_ eq "";
+        if (m/^Team (\d+)$/) {
             last if $found;
-            $found = 1 if $number == $1;
+            $found = 1 if $1 == $team_number;
             next;
         }
         next unless $found;
-        my ($name, @stats) = split(/[:,] +/, $line);
-        die "malformed $line" unless @stats == 2;
-        push @data, $name, \@stats;
+        my ($name, @data) = split(/[:,] +/);
+        die "malformed '$_', data: @data" unless @data == 2;
+        push @stats, $name, \@data;
     }
-    die "nothing for team $number" unless @data;
-    return @data;
+    die "nothing for team $team_number" unless @stats;
+    return @stats;
 }
 
 sub get_winners
 {
     my %data = @_;
-
     my @win;
     my $max = 0;
     for my $key (keys %data) {
         if ($data{$key} > $max) {
-            @win = ($key);
             $max = $data{$key};
+            @win = $key;
         } elsif ($data{$key} == $max) {
             push @win, $key;
         }
