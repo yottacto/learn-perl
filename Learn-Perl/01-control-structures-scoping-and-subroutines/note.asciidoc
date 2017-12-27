@@ -12,4 +12,9 @@ There's more than one way to do it.
 
 - `%` hash and `@` array
 - `ref` function
+- References, see the `perldoc` for
+  http://perldoc.perl.org/perlref.html[perlref],
+  http://perldoc.perl.org/perllol.html[perllol],
+  http://perldoc.perl.org/perldsc.html[perldsc] and
+  http://perldoc.perl.org/perlreftut.html[perlreftut].
 
