@@ -7,40 +7,59 @@ use strict;
 my $team_number = 42;
 my $filename = 'input';
 
-open(my $fh, '<', $filename) or die "cannot open '$filename' $!";
+open my $fh, '<', $filename or die "cannot open '$filename' $!";
 
-while (<$fh>) {
-    chomp;
-    last if ($_ eq "Team $team_number");
-}
-die "cannnot find 'Team $team_number'" if (eof $fh);
-
-my %bugs;
-my %created;
-my $max_bugs = 0;
-my @max_name;
-while (my $line = <$fh>) {
-    chomp($line);
-    next if ($line eq "");
-    last if ($line =~ m/^Team \d+$/);
-    my ($name, $fixed, $created) = split(/[:,] +/, $line, 3);
-    die "malformed '$line'" unless(defined $created);
-    $bugs{$name}    = $fixed;
-    $created{$name} = $created;
-    my $net = $fixed - $created;
-    if ($net > $max_bugs) {
-        $max_bugs = $net;
-        @max_name = $name;
-    } elsif ($net == $max_bugs) {
-        push(@max_name, $name)
-    }
-}
+my %bugs = get_team_stats($fh, $team_number);
 
 say "Bugs created:";
-say " $_: $created{$_}" for sort {-($created{$a} <=> $created{$b})} keys %created;
+say " $_: $bugs{$_}[1]" for sort {$bugs{$b}[1] <=> $bugs{$a}[1]} keys %bugs;
 
-say "Bugs fixed:";
-say " $_: $bugs{$_}" for sort keys %bugs;
+say "Bugs fixed";
+say " $_: $bugs{$_}[0]" for sort keys %bugs;
 
-say "@max_name wins!";
+my @winners = get_winners(map {$_ => $bugs{$_}[0] - $bugs{$_}[1]} keys %bugs);
+
+say "$_ wins!" for @winners;
+
+exit;
+
+sub get_team_stats
+{
+    my ($fh, $number) = @_;
+
+    my @data;
+    my $found;
+    while (my $line = <$fh>) {
+        chomp $line;
+        next if $line eq "";
+        if ($line =~ m/^Team (\d+)$/) {
+            last if $found;
+            $found = 1 if $number == $1;
+            next;
+        }
+        next unless $found;
+        my ($name, @stats) = split(/[:,] +/, $line);
+        die "malformed $line" unless @stats == 2;
+        push @data, $name, \@stats;
+    }
+    die "nothing for team $number" unless @data;
+    return @data;
+}
+
+sub get_winners
+{
+    my %data = @_;
+
+    my @win;
+    my $max = 0;
+    for my $key (keys %data) {
+        if ($data{$key} > $max) {
+            @win = ($key);
+            $max = $data{$key};
+        } elsif ($data{$key} == $max) {
+            push @win, $key;
+        }
+    }
+    return @win;
+}
 
