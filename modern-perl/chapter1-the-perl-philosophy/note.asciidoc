@@ -1,0 +1,42 @@
+== Perldoc
+
+displays the table of contents of the core documentation:
+
+    perldoc perltoc
+
+the table of contents for Frequently Asked Questions about Perl:
+
+    perldoc perlfaq
+
+document Perl’s symbolic operators and syntactic constructs:
+
+    perldoc perlop
+    perldoc perlsyn
+
+lists all of Perl’s symbolic variables:
+
+    perldoc perlvar
+
+browse the list of available built-ins in:
+
+    perldoc perlfunc
+
+Use the `-q` option with a keyword to search the Perl FAQ:
+
+    e.g. perldoc -q sort
+
+The `-f` option shows the documentation for a built-in Perl function:
+
+    e.g. perldoc -f sort
+
+The `-v` option looks up a built-in variable:
+
+    e.g. perldoc -v '$PID'
+
+The `-l` option shows the path to the file containing the documentation.
+
+The `-m` option displays the entire contents of the module,code and all,without
+any special formatting.
+
+== Expressivity
+
