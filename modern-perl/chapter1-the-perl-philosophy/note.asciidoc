@@ -40,3 +40,14 @@ any special formatting.
 
 == Expressivity
 
+""
+You may select from multiple design paradigms, and you may eschew or embrace
+advanced features.
+""
+
+`TIMTOWTDI`, pronounced "Tim Toady," or There’s more
+than one way to do it!
+
+principle `DWIM`, or do what I mean. You could just
+as well call this the principle of least astonishment.
+
